@@ -1,0 +1,38 @@
+#!/bin/sh
+
+WHOAMI=`whoami`
+
+PID=`ps -u $WHOAMI | grep qqserverd | awk '{print $1}'`
+
+if (test "$#" = 0) then
+	echo "Usage: $0 [stop] [start] [status]"
+	exit 0
+fi
+
+if (test "$1" = "start") then
+	if (test "$PID" = "") then
+		./qqserverd 8080
+	else
+		echo "qqserver is running"
+	fi
+	exit 0
+fi
+
+if (test "$1" = "stop") then
+	if (test "$PID" != "") then
+		kill -s 2 $PID
+	fi
+	exit 0
+fi
+
+if (test "$1" = "status") then
+	if (test "$PID" = "") then
+		echo "qqserver is not run"
+	else
+		echo "qqserver is running"
+	fi
+	exit 0
+fi
+
+echo "Usage: $0 [stop] [start] [status]"
+
